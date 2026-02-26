@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Sfide One Shot</title>
+    <style>
+        body { margin: 0; background: #000; color: #d4af37; font-family: 'Georgia', serif; min-height: 100vh; display: flex; flex-direction: column; }
+        .header-bar { background: rgba(0,0,0,0.7); padding: 15px 0; text-align: center; font-size: 2vw; letter-spacing: 5px; text-transform: uppercase; border-bottom: 2px solid #d4af37; }
+        .main { flex: 1; padding: 30px; max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; font-size: 3.5vw; margin-bottom: 40px; letter-spacing: 3px; }
+        label { display: block; font-size: 1.3vw; margin: 15px 0 5px; }
+        input[type="text"], textarea { width: 100%; padding: 12px; margin-bottom: 20px; background: #111; color: #d4af37; border: 1px solid #d4af37; border-radius: 6px; font-size: 1.2vw; }
+        textarea { height: 180px; resize: vertical; }
+        button { padding: 18px 60px; background: transparent; color: #d4af37; border: 2px solid #d4af37; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 1.5vw; border-radius: 6px; display: block; margin: 30px auto; transition: 0.3s; }
+        button:hover { background: #d4af37; color: #000; }
+        #game { display: none; flex-direction: column; height: 100%; }
+        .container { flex: 1; display: flex; position: relative; }
+        .box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; }
+        .box:hover { background: #0a0a0a; }
+        .img-regista { width: 80%; height: 65%; object-fit: contain; border: 3px solid #d4af37; box-shadow: 0 0 40px rgba(212,175,55,0.2); }
+        .nome { font-size: 2.2vw; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; }
+        .vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #d4af37; color: #000; padding: 25px 35px; border-radius: 50%; font-weight: bold; font-size: 4vw; z-index: 10; border: 6px solid #000; }
+        #contatore { background: rgba(0,0,0,0.8); padding: 15px; text-align: center; font-size: 1.4vw; border-top: 2px solid #d4af37; }
+    </style>
+</head>
+<body>
+<div class="header-bar">Absolute Cinema - Creator Sfide</div>
+
+<div class="main">
+  <h1>Crea la tua sfida personalizzata</h1>
+  
+  <label for="nomeSfida">Nome della sfida (es. "Migliori Cantanti Anni 2000"):</label>
+  <input type="text" id="nomeSfida" placeholder="Inserisci un nome epico...">
+
+  <label for="lista">Lista partecipanti (una riga per ognuno, formato: Nome | URL foto diretta):</label>
+  <textarea id="lista" placeholder="Esempio:
+Lady Gaga | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lady_Gaga_at_The_Monster_Ball_Tour.jpg/800px-Lady_Gaga_at_The_Monster_Ball_Tour.jpg
+Eminem | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg/800px-Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg
+Beyoncé | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg/800px-Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg"></textarea>
+
+  <button onclick="creaTorneo()">Crea e Gioca Ora</button>
+</div>
+
+<div id="game">
+  <div class="container">
+    <div class="vs">VS</div>
+    <div onclick="scegli(0)" class="box">
+      <img id="img-sinistra" src="" class="img-regista" referrerpolicy="no-referrer">
+      <p id="nome-sinistro" class="nome"></p>
+    </div>
+    <div onclick="scegli(1)" class="box">
+      <img id="img-destra" src="" class="img-regista" referrerpolicy="no-referrer">
+      <p id="nome-destro" class="nome"></p>
+    </div>
+  </div>
+  <div id="contatore">Rimanenti: <span id="num-restanti">0</span></div>
+</div>
+
+<script>
+  let inGara = [];
+  let vincitoreAttuale;
+  let sfidanteAttuale;
+  let nomeSfidaCorrente = '';
+
+  function creaTorneo() {
+    nomeSfidaCorrente = document.getElementById('nomeSfida').value.trim() || 'Sfida Personalizzata';
+    const testoLista = document.getElementById('lista').value.trim();
+    
+    if (!testoLista) {
+      alert('Inserisci almeno 2 partecipanti!');
+      return;
+    }
+
+    const righe = testoLista.split('\n').map(r => r.trim()).filter(r => r);
+    inGara = righe.map(r => {
+      let [nome, foto] = r.split('|').map(s => s.trim());
+      nome = nome || 'Sconosciuto';
+      foto = foto || 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(nome);
+      return {nome, foto};
+    });
+
+    if (inGara.length < 2) {
+      alert('Servono almeno 2 partecipanti!');
+      return;
+    }
+
+    // Nascondi form, mostra gioco
+    document.querySelector('.main').style.display = 'none';
+    document.getElementById('game').style.display = 'flex';
+
+    // Aggiorna titolo sfida
+    document.querySelector('.header-bar').innerText = nomeSfidaCorrente.toUpperCase();
+
+    inGara.sort(() => Math.random() - 0.5);
+    vincitoreAttuale = inGara.pop();
+    aggiornaSchermata();
+  }
+
+  function aggiornaSchermata() {
+    if (inGara.length > 0) {
+      sfidanteAttuale = inGara.pop();
+      document.getElementById('img-sinistra').src = vincitoreAttuale.foto;
+      document.getElementById('nome-sinistro').innerText = vincitoreAttuale.nome;
+      document.getElementById('img-destra').src = sfidanteAttuale.foto;
+      document.getElementById('nome-destro').innerText = sfidanteAttuale.nome;
+      document.getElementById('num-restanti').innerText = inGara.length + 1;
+    } else {
+      mostraPodio();
+    }
+  }
+
+  function scegli(lato) {
+    if (lato === 1) vincitoreAttuale = sfidanteAttuale;
+    aggiornaSchermata();
+  }
+
+  function mostraPodio() {
+    document.getElementById('game').innerHTML = `
+      <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; color:#d4af37;">
+        <h1 style="font-size:4vw; letter-spacing:12px;">CAMPIONE DI ${nomeSfidaCorrente.toUpperCase()}</h1>
+        <img src="${vincitoreAttuale.foto}" referrerpolicy="no-referrer" style="width:400px; max-height:70vh; object-fit:contain; border:6px solid #d4af37; margin:40px 0; box-shadow:0 0 60px rgba(212,175,55,0.4);" onerror="this.src='https://via.placeholder.com/400x600/111/ccc?text=${encodeURIComponent(vincitoreAttuale.nome)}';">
+        <h2 style="font-size:5vw;">${vincitoreAttuale.nome}</h2>
+        <button onclick="location.reload()" style="margin-top:50px; padding:25px 60px; background:transparent; color:#d4af37; border:3px solid #d4af37; cursor:pointer; font-weight:bold; text-transform:uppercase; font-size:1.8vw; border-radius:8px;">Nuova Sfida</button>
+      </div>`;
+    document.getElementById('contatore').style.display = 'none';
+  }
+
+  // Onerror per placeholder
+  document.getElementById('img-sinistra').onerror = function() {
+    this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-sinistro').innerText || 'Partecipante');
+  };
+  document.getElementById('img-destra').onerror = function() {
+    this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-destro').innerText || 'Partecipante');
+  };
+</script>
+</body>
+</html>
