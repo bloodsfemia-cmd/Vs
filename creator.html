@@ -3,136 +3,303 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Creator Sfide One Shot</title>
+    <title>Absolute Cinema - Crea Sfida</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body { margin: 0; background: #000; color: #d4af37; font-family: 'Georgia', serif; min-height: 100vh; display: flex; flex-direction: column; }
-        .header-bar { background: rgba(0,0,0,0.7); padding: 15px 0; text-align: center; font-size: 2vw; letter-spacing: 5px; text-transform: uppercase; border-bottom: 2px solid #d4af37; }
-        .main { flex: 1; padding: 30px; max-width: 1000px; margin: 0 auto; }
-        h1 { text-align: center; font-size: 3.5vw; margin-bottom: 40px; letter-spacing: 3px; }
-        label { display: block; font-size: 1.3vw; margin: 15px 0 5px; }
-        input[type="text"], textarea { width: 100%; padding: 12px; margin-bottom: 20px; background: #111; color: #d4af37; border: 1px solid #d4af37; border-radius: 6px; font-size: 1.2vw; }
-        textarea { height: 180px; resize: vertical; }
-        button { padding: 18px 60px; background: transparent; color: #d4af37; border: 2px solid #d4af37; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 1.5vw; border-radius: 6px; display: block; margin: 30px auto; transition: 0.3s; }
-        button:hover { background: #d4af37; color: #000; }
-        #game { display: none; flex-direction: column; height: 100%; }
-        .container { flex: 1; display: flex; position: relative; }
-        .box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; }
-        .box:hover { background: #0a0a0a; }
-        .img-regista { width: 80%; height: 65%; object-fit: contain; border: 3px solid #d4af37; box-shadow: 0 0 40px rgba(212,175,55,0.2); }
-        .nome { font-size: 2.2vw; margin-top: 15px; text-transform: uppercase; letter-spacing: 2px; }
-        .vs { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #d4af37; color: #000; padding: 25px 35px; border-radius: 50%; font-weight: bold; font-size: 4vw; z-index: 10; border: 6px solid #000; }
-        #contatore { background: rgba(0,0,0,0.8); padding: 15px; text-align: center; font-size: 1.4vw; border-top: 2px solid #d4af37; }
+        :root {
+            --gold: #d4af37;
+            --dark: #0f0f0f;
+            --gray: #1a1a1a;
+            --light-gold: #e8c670;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: var(--dark);
+            color: var(--gold);
+            font-family: 'Georgia', serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        header {
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        header h1 {
+            font-size: clamp(1.8rem, 4vw, 3rem);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        .container {
+            flex: 1;
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        .card {
+            background: var(--gray);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(212,175,55,0.1);
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+        h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            margin-bottom: 1.5rem;
+            color: var(--light-gold);
+        }
+        .form-group {
+            margin-bottom: 1.8rem;
+        }
+        label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 0.6rem;
+            color: var(--light-gold);
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            background: #111;
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            transition: border 0.3s;
+        }
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--light-gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+        }
+        textarea {
+            min-height: 160px;
+            resize: vertical;
+        }
+        .help-text {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-top: 0.4rem;
+        }
+        .btn {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            padding: 1rem 2.5rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 2rem auto 1rem;
+            letter-spacing: 1px;
+        }
+        .btn:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        .btn-example {
+            background: rgba(212,175,55,0.1);
+            border-color: var(--light-gold);
+            color: var(--light-gold);
+            margin-top: 1rem;
+        }
+        #game {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+        }
+        .tournament-header {
+            text-align: center;
+            font-size: 2.5rem;
+            padding: 1rem;
+            background: rgba(0,0,0,0.5);
+            border-bottom: 1px solid var(--gold);
+        }
+        .vs-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+        }
+        .vs-box {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s;
+        }
+        .vs-box:hover {
+            background: rgba(212,175,55,0.05);
+        }
+        .vs-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--gold);
+            color: #000;
+            font-size: 4rem;
+            font-weight: bold;
+            padding: 1.5rem 2.5rem;
+            border-radius: 50%;
+            border: 8px solid #000;
+            z-index: 10;
+        }
+        .participant-name {
+            font-size: 2rem;
+            margin: 1rem 0;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        .participant-img {
+            width: 80%;
+            max-height: 60vh;
+            object-fit: contain;
+            border: 4px solid var(--gold);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        #contatore {
+            background: rgba(0,0,0,0.8);
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.4rem;
+            border-top: 2px solid var(--gold);
+        }
+        @media (max-width: 768px) {
+            h1, .header-bar { font-size: 5vw; }
+            .btn { font-size: 4vw; padding: 1rem 2rem; }
+        }
     </style>
 </head>
 <body>
-<div class="header-bar">Absolute Cinema - Creator Sfide</div>
+<header class="header-bar">Absolute Cinema</header>
 
 <div class="main">
-  <h1>Crea la tua sfida personalizzata</h1>
-  
-  <label for="nomeSfida">Nome della sfida (es. "Migliori Cantanti Anni 2000"):</label>
-  <input type="text" id="nomeSfida" placeholder="Inserisci un nome epico...">
+    <div class="card">
+        <h1>Crea la tua sfida personalizzata</h1>
+        
+        <div class="form-group">
+            <label for="nomeSfida">Nome della sfida</label>
+            <input type="text" id="nomeSfida" placeholder="Es. 'I Migliori Cantanti Anni 2000'">
+        </div>
 
-  <label for="lista">Lista partecipanti (una riga per ognuno, formato: Nome | URL foto diretta):</label>
-  <textarea id="lista" placeholder="Esempio:
+        <div class="form-group">
+            <label for="lista">Partecipanti (una per riga: Nome | Link foto diretta)</label>
+            <textarea id="lista" placeholder="Esempio:
 Lady Gaga | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lady_Gaga_at_The_Monster_Ball_Tour.jpg/800px-Lady_Gaga_at_The_Monster_Ball_Tour.jpg
 Eminem | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg/800px-Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg
-Beyoncé | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg/800px-Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg"></textarea>
+Beyoncé | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg/800px-Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg
+"></textarea>
+            <div class="help-text">Copia link diretti alle immagini (finiscono con .jpg/.png/.gif). Usa Imgur, Wikimedia, Postimages, ecc.</div>
+        </div>
 
-  <button onclick="creaTorneo()">Crea e Gioca Ora</button>
+        <button class="btn" onclick="creaTorneo()">Crea e Gioca Ora</button>
+        <button class="btn btn-example" onclick="caricaEsempio()">Carica Esempio (Cantanti Anni 2000)</button>
+    </div>
 </div>
 
 <div id="game">
-  <div class="container">
-    <div class="vs">VS</div>
-    <div onclick="scegli(0)" class="box">
-      <img id="img-sinistra" src="" class="img-regista" referrerpolicy="no-referrer">
-      <p id="nome-sinistro" class="nome"></p>
+    <div class="tournament-header" id="sfidaTitle"></div>
+    <div class="vs-container">
+        <div class="vs-text">VS</div>
+        <div onclick="scegli(0)" class="vs-box">
+            <img id="img-sinistra" class="participant-img" src="" alt="" referrerpolicy="no-referrer">
+            <div class="participant-name" id="nome-sinistro"></div>
+        </div>
+        <div onclick="scegli(1)" class="vs-box">
+            <img id="img-destra" class="participant-img" src="" alt="" referrerpolicy="no-referrer">
+            <div class="participant-name" id="nome-destro"></div>
+        </div>
     </div>
-    <div onclick="scegli(1)" class="box">
-      <img id="img-destra" src="" class="img-regista" referrerpolicy="no-referrer">
-      <p id="nome-destro" class="nome"></p>
-    </div>
-  </div>
-  <div id="contatore">Rimanenti: <span id="num-restanti">0</span></div>
+    <div id="contatore">Rimanenti: <span id="num-restanti">0</span></div>
 </div>
 
 <script>
-  let inGara = [];
-  let vincitoreAttuale;
-  let sfidanteAttuale;
-  let nomeSfidaCorrente = '';
+    let inGara = [];
+    let vincitoreAttuale;
+    let sfidanteAttuale;
+    let nomeSfida = '';
 
-  function creaTorneo() {
-    nomeSfidaCorrente = document.getElementById('nomeSfida').value.trim() || 'Sfida Personalizzata';
-    const testoLista = document.getElementById('lista').value.trim();
-    
-    if (!testoLista) {
-      alert('Inserisci almeno 2 partecipanti!');
-      return;
+    function creaTorneo() {
+        nomeSfida = document.getElementById('nomeSfida').value.trim() || 'Sfida Personalizzata';
+        const testo = document.getElementById('lista').value.trim();
+        if (!testo) return alert('Inserisci almeno 2 partecipanti!');
+
+        const righe = testo.split('\n').map(r => r.trim()).filter(r => r);
+        inGara = righe.map(r => {
+            const [nome, foto] = r.split('|').map(s => s.trim());
+            return {
+                nome: nome || 'Sconosciuto',
+                foto: foto || 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(nome || 'Partecipante')
+            };
+        });
+
+        if (inGara.length < 2) return alert('Servono almeno 2 partecipanti!');
+
+        document.querySelector('.main').style.display = 'none';
+        document.getElementById('game').style.display = 'flex';
+        document.getElementById('sfidaTitle').innerText = nomeSfida.toUpperCase();
+
+        inGara.sort(() => Math.random() - 0.5);
+        vincitoreAttuale = inGara.pop();
+        aggiornaSchermata();
     }
 
-    const righe = testoLista.split('\n').map(r => r.trim()).filter(r => r);
-    inGara = righe.map(r => {
-      let [nome, foto] = r.split('|').map(s => s.trim());
-      nome = nome || 'Sconosciuto';
-      foto = foto || 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(nome);
-      return {nome, foto};
-    });
-
-    if (inGara.length < 2) {
-      alert('Servono almeno 2 partecipanti!');
-      return;
+    function aggiornaSchermata() {
+        if (inGara.length > 0) {
+            sfidanteAttuale = inGara.pop();
+            document.getElementById('img-sinistra').src = vincitoreAttuale.foto;
+            document.getElementById('nome-sinistro').innerText = vincitoreAttuale.nome;
+            document.getElementById('img-destra').src = sfidanteAttuale.foto;
+            document.getElementById('nome-destro').innerText = sfidanteAttuale.nome;
+            document.getElementById('num-restanti').innerText = inGara.length + 1;
+        } else {
+            mostraPodio();
+        }
     }
 
-    // Nascondi form, mostra gioco
-    document.querySelector('.main').style.display = 'none';
-    document.getElementById('game').style.display = 'flex';
-
-    // Aggiorna titolo sfida
-    document.querySelector('.header-bar').innerText = nomeSfidaCorrente.toUpperCase();
-
-    inGara.sort(() => Math.random() - 0.5);
-    vincitoreAttuale = inGara.pop();
-    aggiornaSchermata();
-  }
-
-  function aggiornaSchermata() {
-    if (inGara.length > 0) {
-      sfidanteAttuale = inGara.pop();
-      document.getElementById('img-sinistra').src = vincitoreAttuale.foto;
-      document.getElementById('nome-sinistro').innerText = vincitoreAttuale.nome;
-      document.getElementById('img-destra').src = sfidanteAttuale.foto;
-      document.getElementById('nome-destro').innerText = sfidanteAttuale.nome;
-      document.getElementById('num-restanti').innerText = inGara.length + 1;
-    } else {
-      mostraPodio();
+    function scegli(lato) {
+        if (lato === 1) vincitoreAttuale = sfidanteAttuale;
+        aggiornaSchermata();
     }
-  }
 
-  function scegli(lato) {
-    if (lato === 1) vincitoreAttuale = sfidanteAttuale;
-    aggiornaSchermata();
-  }
+    function mostraPodio() {
+        document.getElementById('game').innerHTML = `
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; color:var(--gold);">
+                <h1 style="font-size:4vw; letter-spacing:10px; margin-bottom:30px;">CAMPIONE DI ${nomeSfida.toUpperCase()}</h1>
+                <img src="${vincitoreAttuale.foto}" referrerpolicy="no-referrer" style="width:400px; max-height:65vh; object-fit:contain; border:6px solid var(--gold); border-radius:12px; box-shadow:0 15px 50px rgba(212,175,55,0.3);" onerror="this.src='https://via.placeholder.com/400x600/111/ccc?text=${encodeURIComponent(vincitoreAttuale.nome)}';">
+                <h2 style="font-size:5vw; margin:30px 0;">${vincitoreAttuale.nome}</h2>
+                <button onclick="location.reload()" style="padding:20px 50px; background:transparent; color:var(--gold); border:3px solid var(--gold); border-radius:8px; font-size:1.8vw; cursor:pointer; text-transform:uppercase; font-weight:bold;">Nuova Sfida</button>
+            </div>`;
+        document.getElementById('contatore').style.display = 'none';
+    }
 
-  function mostraPodio() {
-    document.getElementById('game').innerHTML = `
-      <div style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#000; color:#d4af37;">
-        <h1 style="font-size:4vw; letter-spacing:12px;">CAMPIONE DI ${nomeSfidaCorrente.toUpperCase()}</h1>
-        <img src="${vincitoreAttuale.foto}" referrerpolicy="no-referrer" style="width:400px; max-height:70vh; object-fit:contain; border:6px solid #d4af37; margin:40px 0; box-shadow:0 0 60px rgba(212,175,55,0.4);" onerror="this.src='https://via.placeholder.com/400x600/111/ccc?text=${encodeURIComponent(vincitoreAttuale.nome)}';">
-        <h2 style="font-size:5vw;">${vincitoreAttuale.nome}</h2>
-        <button onclick="location.reload()" style="margin-top:50px; padding:25px 60px; background:transparent; color:#d4af37; border:3px solid #d4af37; cursor:pointer; font-weight:bold; text-transform:uppercase; font-size:1.8vw; border-radius:8px;">Nuova Sfida</button>
-      </div>`;
-    document.getElementById('contatore').style.display = 'none';
-  }
+    document.getElementById('img-sinistra').onerror = function() {
+        this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-sinistro').innerText || 'Partecipante');
+    };
+    document.getElementById('img-destra').onerror = function() {
+        this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-destro').innerText || 'Partecipante');
+    };
 
-  // Onerror per placeholder
-  document.getElementById('img-sinistra').onerror = function() {
-    this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-sinistro').innerText || 'Partecipante');
-  };
-  document.getElementById('img-destra').onerror = function() {
-    this.src = 'https://via.placeholder.com/400x600/111/ccc?text=' + encodeURIComponent(document.getElementById('nome-destro').innerText || 'Partecipante');
-  };
+    function caricaEsempio() {
+        document.getElementById('nomeSfida').value = 'Migliori Cantanti Anni 2000';
+        document.getElementById('lista').value = `Lady Gaga | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Lady_Gaga_at_The_Monster_Ball_Tour.jpg/800px-Lady_Gaga_at_The_Monster_Ball_Tour.jpg
+Eminem | https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg/800px-Eminem_at_the_2018_iHeartRadio_Music_Awards.jpg
+Beyoncé | https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg/800px-Beyonc%C3%A9_-_The_Formation_World_Tour%2C_at_Wembley_Stadium_in_London%2C_England.jpg
+Justin Timberlake | https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Justin_Timberlake_by_Gage_Skidmore.jpg/800px-Justin_Timberlake_by_Gage_Skidmore.jpg
+Alicia Keys | https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Alicia_Keys_at_the_2016_Toronto_International_Film_Festival.jpg/800px-Alicia_Keys_at_the_2016_Toronto_International_Film_Festival.jpg`;
+    }
 </script>
 </body>
 </html>
