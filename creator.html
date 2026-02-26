@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Absolute Cinema - Crea Sfida</title>
+    <title>OneShot - Crea Sfida</title>
     <style>
         :root {
             --gold: #d4af37;
@@ -25,8 +25,9 @@
         .participant-card input { width: 100%; padding: 0.8rem; margin: 0.6rem 0; background: #000; border: 1px solid var(--light-gold); color: white; border-radius: 6px; font-size: 1rem; }
         .participant-card input:focus { outline: none; border-color: var(--light-gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.2); }
         .participant-card.error { border-color: #ff4444; box-shadow: 0 0 10px rgba(255,68,68,0.3); }
-        .start-btn { background: transparent; color: var(--gold); border: 3px solid var(--gold); padding: 1.2rem 3rem; font-size: 1.6rem; font-weight: bold; text-transform: uppercase; border-radius: 10px; cursor: pointer; margin: 3rem auto; display: block; transition: 0.3s; }
-        .start-btn:hover { background: var(--gold); color: #000; }
+        .start-btn, .share-btn { background: transparent; color: var(--gold); border: 3px solid var(--gold); padding: 1rem 2.5rem; font-size: 1.4rem; font-weight: bold; text-transform: uppercase; border-radius: 8px; cursor: pointer; margin: 1.5rem; transition: 0.3s; }
+        .start-btn:hover, .share-btn:hover { background: var(--gold); color: #000; }
+        .actions { text-align: center; }
         #game { display: none; }
         .vs-container { flex: 1; display: flex; position: relative; }
         .vs-box { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
@@ -34,27 +35,31 @@
         .participant-img { width: 80%; max-height: 65vh; object-fit: contain; border: 4px solid var(--gold); border-radius: 12px; box-shadow: 0 10px 50px rgba(0,0,0,0.7); }
         .participant-name { font-size: 2.5rem; margin: 1.5rem 0; text-align: center; text-transform: uppercase; letter-spacing: 2px; }
         #contatore { background: rgba(0,0,0,0.85); padding: 1.5rem; text-align: center; font-size: 1.5rem; border-top: 2px solid var(--gold); }
+        #sfidaTitle { background: rgba(0,0,0,0.7); padding: 1rem; text-align: center; font-size: 2.2rem; border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 20; }
     </style>
 </head>
 <body>
 <header>
-    <h1>Absolute Cinema - Crea Sfida</h1>
+    <h1>OneShot</h1>
 </header>
 
 <div class="container" id="creator">
     <div class="step">
-        <h2>1. Quanti partecipanti? (numero pari)</h2>
+        <h2>1. Quanti partecipanti? (pari, max 100)</h2>
         <div class="number-buttons" id="numButtons"></div>
     </div>
 
     <div class="step" id="formStep" style="display:none;">
-        <h2>2. Inserisci nome e foto (esattamente ${selectedNum || ''} quadrati)</h2>
+        <h2>2. Inserisci nome e foto (esattamente <span id="numScelto"></span> quadrati)</h2>
         <div class="grid" id="gridInputs"></div>
-        <button class="start-btn" onclick="avviaTorneo()">Inizia la Sfida</button>
+        <div class="actions">
+            <button class="start-btn" onclick="avviaTorneo()">Inizia Sfida</button>
+        </div>
     </div>
 </div>
 
 <div id="game">
+    <div id="sfidaTitle"></div>
     <div class="vs-container">
         <div class="vs-text">VS</div>
         <div onclick="scegli(0)" class="vs-box">
@@ -76,7 +81,7 @@
     let sfidanteAttuale;
     let selectedNum = 0;
 
-    // Crea bottoni numeri pari da 4 a 100
+    // Bottoni numeri pari 4-100
     const numButtons = document.getElementById('numButtons');
     for (let i = 4; i <= 100; i += 2) {
         const btn = document.createElement('button');
@@ -107,7 +112,7 @@
             partecipanti.push(card);
         }
 
-        document.getElementById('formStep').querySelector('h2').innerText = `2. Inserisci nome e foto (esattamente ${num} quadrati)`;
+        document.getElementById('numScelto').innerText = num;
         document.getElementById('formStep').style.display = 'block';
         window.scrollTo({ top: document.getElementById('formStep').offsetTop - 100, behavior: 'smooth' });
     }
@@ -128,9 +133,7 @@
             }
         });
 
-        if (!valido) return alert('Completa tutti i campi! Ogni quadrato deve avere nome e link foto.');
-
-        if (lista.length !== selectedNum || lista.length % 2 !== 0) return alert('Errore: numero partecipanti non corrisponde o non è pari.');
+        if (!valido) return alert('Completa tutti i campi!');
 
         inGara = [...lista];
         inGara.sort(() => Math.random() - 0.5);
@@ -138,6 +141,8 @@
 
         document.getElementById('creator').style.display = 'none';
         document.getElementById('game').style.display = 'flex';
+        document.getElementById('sfidaTitle').innerText = document.getElementById('nomeSfida')?.value.trim() || 'Sfida Personalizzata';
+
         aggiornaSchermata();
     }
 
